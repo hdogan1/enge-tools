@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENGE 1216 — Team Conflict Extension Request Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F6F2;
+    --surface: #FFFFFF;
+    --surface2: #F0EEE9;
+    --border: #E2DED6;
+    --border-strong: #C8C3BA;
+    --text: #1A1917;
+    --text-muted: #706C65;
+    --text-faint: #A09C95;
+    --accent: #C85A2A;
+    --accent-bg: #FBF0EB;
+    --accent-border: #E8B49A;
+    --success: #2A7A4B;
+    --success-bg: #EBF7F1;
+    --success-border: #9ADCBC;
+    --warning: #8A6000;
+    --warning-bg: #FFF8E6;
+    --warning-border: #F0D080;
+    --danger: #B02020;
+    --danger-bg: #FDEEED;
+    --danger-border: #F0AAAA;
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .page-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .vt-badge {
+    background: #861F41;
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.06em;
+    font-family: var(--mono);
+  }
+
+  .header-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  .main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 2.5rem;
+  }
+
+  .progress-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .progress-step:last-child { flex: 0; }
+
+  .progress-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-faint);
+    font-family: var(--mono);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .progress-dot.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: white;
+  }
+
+  .progress-dot.done {
+    border-color: var(--success);
+    background: var(--success-bg);
+    color: var(--success);
+  }
+
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+
+  .progress-label.active { color: var(--text-muted); font-weight: 500; }
+  .progress-label.done { color: var(--success); }
+
+  .progress-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin: 0 8px;
+  }
+
+  .step { display: none; animation: fadeIn 0.2s ease; }
+  .step.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-eyebrow {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .step-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1.75rem;
+    line-height: 1.3;
+  }
+
+  .conflict-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .conflict-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.1rem 1rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+  }
+
+  .conflict-card:hover {
+    border-color: var(--border-strong);
+    background: var(--surface2);
+  }
+
+  .conflict-card.selected {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+  }
+
+  .cc-icon {
+    font-size: 22px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .cc-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .cc-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .form-group { margin-bottom: 1.1rem; }
+
+  .field-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    display: block;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  input[type="text"],
+  input[type="datetime-local"],
+  textarea,
+  select {
+    width: 100%;
+    font-family: var(--font);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.15s;
+    resize: vertical;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+  }
+
+  textarea { line-height: 1.6; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: 1.5px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    transition: all 0.15s;
+  }
+
+  .btn:hover { background: var(--surface2); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-primary {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  .btn-primary:hover { opacity: 0.82; background: var(--text); }
+
+  .btn-copy {
+    background: var(--surface);
+    border-color: var(--border-strong);
+  }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .checklist li:last-child { border-bottom: none; }
+
+  .check-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-weight: 500;
+  }
+
+  .check-pass { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+  .check-fail { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+  .check-warn { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+
+  .alert {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    margin-top: 1.25rem;
+    line-height: 1.6;
+    border: 1px solid;
+  }
+
+  .alert-success { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
+  .alert-danger { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-border); }
+  .alert-warning { background: var(--warning-bg); color: var(--warning); border-color: var(--warning-border); }
+
+  .email-box {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.6rem;
+    font-size: 13.5px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    color: var(--text);
+    font-family: var(--mono);
+  }
+
+  .loading-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 2rem 0;
+  }
+
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .copy-confirm {
+    font-size: 13px;
+    color: var(--success);
+    margin-top: 8px;
+    display: none;
+    font-family: var(--mono);
+  }
+
+  .hint {
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 480px) {
+    .conflict-grid { grid-template-columns: 1fr; }
+    .header-sub { display: none; }
+    .progress-label { display: none; }
+    .main { padding: 1.5rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <span class="vt-badge">VT</span>
+  <span class="header-title">ENGE 1216 — Team Conflict Extension Request</span>
+  <span class="header-sub">First-Year Engineering</span>
+</header>
+
+<main class="main">
+
+  <!-- Progress bar -->
+  <div class="progress-bar" id="progress-bar">
+    <div class="progress-step">
+      <div class="progress-dot active" id="dot-0">1</div>
+      <span class="progress-label active" id="lbl-0">Conflict type</span>
+    </div>
+    <div class="progress-line"></div>
+    <div class="progress-step">
+      <div class="progress-dot" id="dot-1">2</div>
+      <span class="progress-label" id="lbl-1">Situation</span>
+    </div>
+    <div class="progress-line"></div>
+    <div class="progress-step">
+      <div class="progress-dot" id="dot-2">3</div>
+      <span class="progress-label" id="lbl-2">Eligibility</span>
+    </div>
+    <div class="progress-line"></div>
+    <div class="progress-step">
+      <div class="progress-dot" id="dot-3">4</div>
+      <span class="progress-label" id="lbl-3">Email draft</span>
+    </div>
+  </div>
+
+  <!-- Step 0: Conflict type -->
+  <div class="step active" id="step-0">
+    <div class="step-eyebrow">Step 1 of 4</div>
+    <div class="step-title">What type of team conflict are you facing?</div>
+    <div class="conflict-grid">
+      <button class="conflict-card" onclick="selectConflict('communication', this)">
+        <span class="cc-icon">💬</span>
+        <span class="cc-label">Communication breakdown</span>
+        <span class="cc-desc">Teammates unresponsive or unreachable</span>
+      </button>
+      <button class="conflict-card" onclick="selectConflict('contribution', this)">
+        <span class="cc-icon">⚖️</span>
+        <span class="cc-label">Unequal contribution</span>
+        <span class="cc-desc">Some members not doing their fair share</span>
+      </button>
+      <button class="conflict-card" onclick="selectConflict('scheduling', this)">
+        <span class="cc-icon">📅</span>
+        <span class="cc-label">Scheduling conflicts</span>
+        <span class="cc-desc">Team can't find time to meet or coordinate</span>
+      </button>
+      <button class="conflict-card" onclick="selectConflict('quality', this)">
+        <span class="cc-icon">📝</span>
+        <span class="cc-label">Quality disagreement</span>
+        <span class="cc-desc">Disputes on approach or work standards</span>
+      </button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-step0-next" onclick="goStep(1)" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- Step 1: Situation details -->
+  <div class="step" id="step-1">
+    <div class="step-eyebrow">Step 2 of 4</div>
+    <div class="step-title">Tell us about the situation</div>
+    <div class="card">
+      <div class="form-group">
+        <label class="field-label">Assignment name</label>
+        <input type="text" id="assignment" placeholder="e.g. Design Memo, Final Project Report…">
+      </div>
+      <div class="form-group">
+        <label class="field-label">Your name &amp; section</label>
+        <input type="text" id="student-name" placeholder="e.g. Alex Smith — Section 03, 2:30 PM">
+        <p class="hint">This will appear in the email signature per course email guidelines.</p>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Assignment deadline</label>
+        <input type="datetime-local" id="deadline">
+      </div>
+    </div>
+    <div class="card">
+      <div class="form-group">
+        <label class="field-label">Describe what happened</label>
+        <textarea id="situation" rows="4" placeholder="Be specific. e.g. Two teammates have not responded to messages on Slack or email for over a week. We attempted to contact them on three separate occasions…"></textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="field-label">What has your team already tried?</label>
+        <textarea id="tried" rows="3" placeholder="e.g. We held an emergency team meeting on Monday, reassigned tasks, and sent documented messages asking for a status update…"></textarea>
+        <p class="hint">Instructors need to see prior effort before granting extensions.</p>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="goStep(0)">← Back</button>
+      <button class="btn btn-primary" onclick="validateStep1()">Check eligibility →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Eligibility -->
+  <div class="step" id="step-2">
+    <div class="step-eyebrow">Step 3 of 4</div>
+    <div class="step-title">Eligibility check</div>
+    <div class="card" id="eligibility-card">
+      <ul class="checklist" id="checklist"></ul>
+    </div>
+    <div id="eligibility-alert"></div>
+    <div class="btn-row">
+      <button class="btn" onclick="goStep(1)">← Back</button>
+      <button class="btn btn-primary" id="btn-generate" onclick="goStep(3)">Generate email draft →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Email draft -->
+  <div class="step" id="step-3">
+    <div class="step-eyebrow">Step 4 of 4</div>
+    <div class="step-title">Your extension request email</div>
+    <div id="email-loading" class="loading-row">
+      <div class="spinner"></div>
+      Generating your professional email draft…
+    </div>
+    <div id="email-output" style="display:none;">
+      <div class="email-box" id="email-content"></div>
+      <div class="btn-row">
+        <button class="btn" onclick="goStep(2)">← Back</button>
+        <button class="btn btn-copy" onclick="copyEmail()">Copy email</button>
+      </div>
+      <div class="copy-confirm" id="copy-confirm">✓ Copied to clipboard</div>
+      <p class="hint" style="margin-top: 1rem;">Review and personalise the email before sending. Make sure all team members agree on the content before submitting.</p>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  let conflictType = '';
+  let generatedEmail = '';
+
+  const conflictLabels = {
+    communication: 'communication breakdown — teammates are unresponsive',
+    contribution: 'unequal contribution from team members',
+    scheduling: 'scheduling conflicts preventing coordination',
+    quality: 'disagreement on work quality or approach'
+  };
+
+  function selectConflict(type, btn) {
+    conflictType = type;
+    document.querySelectorAll('.conflict-card').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('btn-step0-next').disabled = false;
+  }
+
+  function setProgress(activeStep) {
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById('dot-' + i);
+      const lbl = document.getElementById('lbl-' + i);
+      dot.className = 'progress-dot';
+      lbl.className = 'progress-label';
+      if (i < activeStep) { dot.classList.add('done'); dot.textContent = '✓'; lbl.classList.add('done'); }
+      else if (i === activeStep) { dot.classList.add('active'); dot.textContent = i + 1; lbl.classList.add('active'); }
+      else { dot.textContent = i + 1; }
+    }
+  }
+
+  function goStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step-' + n).classList.add('active');
+    setProgress(n);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (n === 3) generateEmail();
+  }
+
+  function validateStep1() {
+    const assignment = document.getElementById('assignment').value.trim();
+    const name = document.getElementById('student-name').value.trim();
+    const deadline = document.getElementById('deadline').value;
+    const situation = document.getElementById('situation').value.trim();
+    const tried = document.getElementById('tried').value.trim();
+
+    if (!assignment || !deadline || !situation || !tried || !name) {
+      alert('Please fill in all fields before continuing.');
+      return;
+    }
+
+    const deadlineDate = new Date(deadline);
+    const now = new Date();
+    const hoursUntil = (deadlineDate - now) / (1000 * 60 * 60);
+
+    let items = [];
+    let canProceed = true;
+
+    if (hoursUntil >= 24) {
+      items.push({ status: 'pass', text: `Request submitted at least 24 hours before deadline — ${Math.round(hoursUntil)} hours remaining` });
+    } else if (hoursUntil > 0) {
+      items.push({ status: 'fail', text: `Deadline is only ${Math.round(hoursUntil)} hours away — the syllabus requires 24+ hours notice for extension requests` });
+      canProceed = false;
+    } else {
+      items.push({ status: 'fail', text: 'The deadline has already passed — late extension requests are generally not accepted without documentation' });
+      canProceed = false;
+    }
+
+    items.push({ status: 'pass', text: `Conflict type identified: ${conflictLabels[conflictType]}` });
+
+    if (situation.length > 60) {
+      items.push({ status: 'pass', text: 'Situation described with sufficient detail for the instructor to evaluate' });
+    } else {
+      items.push({ status: 'warn', text: 'Situation description is brief — consider adding more specific detail about what happened and when' });
+    }
+
+    if (tried.length > 40) {
+      items.push({ status: 'pass', text: 'Prior resolution attempts documented — this strengthens your request' });
+    } else {
+      items.push({ status: 'warn', text: 'Document more specifically what your team already tried — instructors want to see genuine effort first' });
+    }
+
+    const checklistEl = document.getElementById('checklist');
+    checklistEl.innerHTML = items.map(item => {
+      const icons = { pass: '✓', fail: '✗', warn: '!' };
+      return `<li><span class="check-icon check-${item.status}">${icons[item.status]}</span><span>${item.text}</span></li>`;
+    }).join('');
+
+    const alertEl = document.getElementById('eligibility-alert');
+    if (!canProceed) {
+      alertEl.innerHTML = '<div class="alert alert-danger">Your request does not meet the 24-hour notice requirement. Contact your instructor directly as soon as possible and bring any documentation you have.</div>';
+      document.getElementById('btn-generate').disabled = true;
+    } else {
+      alertEl.innerHTML = '<div class="alert alert-success">Your request meets the syllabus requirements. Proceed to generate your email draft.</div>';
+      document.getElementById('btn-generate').disabled = false;
+    }
+
+    goStep(2);
+  }
+
+  async function generateEmail() {
+    document.getElementById('email-loading').style.display = 'flex';
+    document.getElementById('email-output').style.display = 'none';
+
+    const assignment = document.getElementById('assignment').value.trim();
+    const name = document.getElementById('student-name').value.trim();
+    const deadline = document.getElementById('deadline').value;
+    const situation = document.getElementById('situation').value.trim();
+    const tried = document.getElementById('tried').value.trim();
+    const deadlineStr = new Date(deadline).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    const prompt = `You are helping a Virginia Tech first-year engineering student write a formal extension request email for ENGE 1216.
+
+The syllabus requires all of the following in a valid extension request:
+1. The request must come from the team (not just one person)
+2. Must be submitted at least 24 hours before the deadline
+3. Must include a concrete plan to complete the work with a timeline
+4. Must include specific changes to team practices to prevent future problems
+
+Write a professional, concise email. Include:
+- Subject line (on its own line, labeled "Subject:")
+- Salutation to Dr. Dogan
+- Brief description of the team conflict
+- What the team already tried to resolve it
+- A specific completion plan with realistic timeline
+- Specific team practice adjustments going forward
+- Professional closing signed by the team with the student's name and section
+
+Details:
+Student name / section: ${name}
+Assignment: ${assignment}
+Deadline: ${deadlineStr}
+Conflict type: ${conflictLabels[conflictType]}
+Situation: ${situation}
+What was tried: ${tried}
+
+Write ONLY the email, starting with "Subject:". No preamble or commentary.`;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+      const data = await response.json();
+      generatedEmail = data.content.map(i => i.text || '').join('\n').trim();
+    } catch (err) {
+      generatedEmail = '[Error generating email — please check your internet connection and try again.]';
+    }
+
+    document.getElementById('email-content').textContent = generatedEmail;
+    document.getElementById('email-loading').style.display = 'none';
+    document.getElementById('email-output').style.display = 'block';
+  }
+
+  function copyEmail() {
+    navigator.clipboard.writeText(generatedEmail).then(() => {
+      const el = document.getElementById('copy-confirm');
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 2500);
+    });
+  }
+</script>
+</body>
+</html>
