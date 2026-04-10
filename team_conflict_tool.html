@@ -3,146 +3,148 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ENGE 1216 — Team Conflict Extension Request Tool</title>
+<title>ENGE 1216 — Team Conflict Resolution Journal</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #F7F6F2;
-    --surface: #FFFFFF;
-    --surface2: #F0EEE9;
-    --border: #E2DED6;
-    --border-strong: #C8C3BA;
-    --text: #1A1917;
-    --text-muted: #706C65;
-    --text-faint: #A09C95;
-    --accent: #861F41;
-    --accent-bg: #F9EEF1;
-    --accent-border: #D9A0AF;
-    --success: #2A7A4B;
-    --success-bg: #EBF7F1;
-    --success-border: #9ADCBC;
-    --warning: #8A6000;
-    --warning-bg: #FFF8E6;
-    --warning-border: #F0D080;
-    --danger: #B02020;
-    --danger-bg: #FDEEED;
-    --danger-border: #F0AAAA;
-    --font: 'DM Sans', sans-serif;
-    --mono: 'DM Mono', monospace;
-    --radius: 10px;
-    --radius-lg: 16px;
+    --bg: #F7F6F2; --surface: #FFFFFF; --surface2: #F0EEE9;
+    --border: #E2DED6; --border-strong: #C8C3BA;
+    --text: #1A1917; --text-muted: #706C65; --text-faint: #A09C95;
+    --accent: #861F41; --accent-bg: #F9EEF1; --accent-border: #D9A0AF;
+    --success: #2A7A4B; --success-bg: #EBF7F1; --success-border: #9ADCBC;
+    --warning: #8A6000; --warning-bg: #FFF8E6; --warning-border: #F0D080;
+    --info: #1A5A8A; --info-bg: #EAF3FB; --info-border: #9AC4E8;
+    --font: 'DM Sans', sans-serif; --mono: 'DM Mono', monospace;
+    --radius: 10px; --radius-lg: 16px;
   }
-
   body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
 
   .page-header {
     background: var(--surface); border-bottom: 1px solid var(--border);
     padding: 1.1rem 2rem; display: flex; align-items: center; gap: 14px;
   }
-  .vt-badge {
-    background: #861F41; color: white; font-size: 11px; font-weight: 500;
-    padding: 4px 10px; border-radius: 6px; letter-spacing: 0.06em; font-family: var(--mono);
-  }
+  .vt-badge { background: #861F41; color: white; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.06em; font-family: var(--mono); }
   .header-title { font-size: 15px; font-weight: 500; }
   .header-sub { font-size: 13px; color: var(--text-muted); margin-left: auto; }
 
-  .main { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .main { max-width: 700px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 
-  .progress-bar { display: flex; align-items: center; margin-bottom: 2.5rem; }
-  .progress-step { display: flex; align-items: center; gap: 8px; flex: 1; }
+  /* Progress */
+  .progress-wrap { margin-bottom: 2.5rem; }
+  .progress-bar { display: flex; align-items: center; }
+  .progress-step { display: flex; align-items: center; gap: 6px; flex: 1; }
   .progress-step:last-child { flex: 0; }
   .progress-dot {
-    width: 28px; height: 28px; border-radius: 50%;
+    width: 26px; height: 26px; border-radius: 50%;
     border: 1.5px solid var(--border-strong); background: var(--surface);
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 500; color: var(--text-faint);
+    font-size: 10px; font-weight: 500; color: var(--text-faint);
     font-family: var(--mono); flex-shrink: 0; transition: all 0.2s;
   }
   .progress-dot.active { border-color: var(--accent); background: var(--accent); color: white; }
   .progress-dot.done { border-color: var(--success); background: var(--success-bg); color: var(--success); }
-  .progress-label { font-size: 12px; color: var(--text-faint); white-space: nowrap; }
+  .progress-label { font-size: 11px; color: var(--text-faint); white-space: nowrap; }
   .progress-label.active { color: var(--text-muted); font-weight: 500; }
   .progress-label.done { color: var(--success); }
-  .progress-line { flex: 1; height: 1px; background: var(--border); margin: 0 8px; }
+  .progress-line { flex: 1; height: 1px; background: var(--border); margin: 0 6px; }
 
+  /* Steps */
   .step { display: none; animation: fadeIn 0.2s ease; }
   .step.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
   .step-eyebrow { font-size: 11px; font-family: var(--mono); color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
-  .step-title { font-size: 24px; font-weight: 500; margin-bottom: 1.75rem; line-height: 1.3; }
+  .step-title { font-size: 22px; font-weight: 500; margin-bottom: 6px; line-height: 1.3; }
+  .step-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 1.75rem; line-height: 1.6; }
 
+  /* Conflict type cards */
   .conflict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
-  .conflict-card {
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: var(--radius-lg); padding: 1.1rem;
-    cursor: pointer; transition: all 0.15s; text-align: left;
-  }
+  .conflict-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.1rem; cursor: pointer; transition: all 0.15s; text-align: left; }
   .conflict-card:hover { border-color: var(--border-strong); background: var(--surface2); }
   .conflict-card.selected { border-color: var(--accent); background: var(--accent-bg); }
-  .cc-icon { font-size: 22px; display: block; margin-bottom: 8px; }
+  .cc-icon { font-size: 20px; display: block; margin-bottom: 8px; }
   .cc-label { font-size: 14px; font-weight: 500; display: block; margin-bottom: 4px; }
   .cc-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
-  .form-group { margin-bottom: 1.1rem; }
-  .field-label {
-    font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px;
-    display: block; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.05em;
+  /* Communication checklist */
+  .comm-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+  .comm-item {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 12px 14px; cursor: pointer;
+    transition: all 0.15s;
   }
-  input[type="text"], input[type="datetime-local"], textarea {
+  .comm-item:hover { border-color: var(--border-strong); }
+  .comm-item.checked { border-color: var(--success); background: var(--success-bg); }
+  .comm-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; cursor: pointer; }
+  .comm-item-label { font-size: 14px; font-weight: 500; flex: 1; }
+  .comm-item-desc { font-size: 12px; color: var(--text-muted); }
+  .comm-none { background: var(--warning-bg); border-color: var(--warning-border) !important; }
+  .comm-none.checked { background: var(--warning-bg); border-color: var(--warning-border); }
+
+  /* Reflection prompts */
+  .reflection-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.25rem 1.4rem; margin-bottom: 1rem;
+  }
+  .reflection-label {
+    font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px;
+  }
+  .reflection-hint { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.5; }
+
+  /* Form elements */
+  .form-group { margin-bottom: 1.1rem; }
+  .field-label { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; display: block; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.05em; }
+  input[type="text"], input[type="datetime-local"], textarea, select {
     width: 100%; font-family: var(--font); font-size: 14px; color: var(--text);
     background: var(--surface); border: 1.5px solid var(--border);
     border-radius: var(--radius); padding: 10px 14px; outline: none;
     transition: border-color 0.15s; resize: vertical;
   }
-  input:focus, textarea:focus { border-color: var(--accent); }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
   textarea { line-height: 1.6; }
 
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.4rem; margin-bottom: 1rem; }
 
+  /* Buttons */
   .btn-row { display: flex; gap: 10px; margin-top: 1.75rem; flex-wrap: wrap; }
-  .btn {
-    font-family: var(--font); font-size: 14px; font-weight: 500;
-    padding: 10px 22px; border-radius: var(--radius); cursor: pointer;
-    border: 1.5px solid var(--border-strong); background: var(--surface);
-    color: var(--text); transition: all 0.15s;
-  }
+  .btn { font-family: var(--font); font-size: 14px; font-weight: 500; padding: 10px 22px; border-radius: var(--radius); cursor: pointer; border: 1.5px solid var(--border-strong); background: var(--surface); color: var(--text); transition: all 0.15s; }
   .btn:hover { background: var(--surface2); }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
   .btn-primary:hover { opacity: 0.82; background: var(--text); }
 
-  .checklist { list-style: none; padding: 0; }
-  .checklist li {
-    display: flex; align-items: flex-start; gap: 10px; font-size: 14px;
-    padding: 10px 0; border-bottom: 1px solid var(--border); line-height: 1.5;
-  }
-  .checklist li:last-child { border-bottom: none; }
-  .check-icon {
-    width: 20px; height: 20px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; flex-shrink: 0; margin-top: 1px; font-weight: 500;
-  }
-  .check-pass { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
-  .check-fail { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
-  .check-warn { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+  /* Info boxes */
+  .tip-box { padding: 12px 16px; border-radius: var(--radius); font-size: 13.5px; line-height: 1.6; border: 1px solid; margin-bottom: 1rem; }
+  .tip-info { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
+  .tip-warn { background: var(--warning-bg); color: var(--warning); border-color: var(--warning-border); }
+  .tip-success { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
 
-  .alert { padding: 12px 16px; border-radius: var(--radius); font-size: 14px; margin-top: 1.25rem; line-height: 1.6; border: 1px solid; }
-  .alert-success { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
-  .alert-danger { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-border); }
+  /* Learning strategies */
+  .strategy-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+  .strategy-item { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; transition: all 0.15s; }
+  .strategy-item:hover { border-color: var(--border-strong); }
+  .strategy-item.selected { border-color: var(--accent); background: var(--accent-bg); }
+  .strategy-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+  .strategy-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
-  .email-box {
+  /* Summary doc */
+  .summary-doc {
     background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: var(--radius-lg); padding: 1.5rem 1.6rem;
-    font-size: 13.5px; line-height: 1.9; white-space: pre-wrap;
-    color: var(--text); font-family: var(--mono);
+    border-radius: var(--radius-lg); padding: 2rem;
+    font-size: 13.5px; line-height: 1.9; color: var(--text);
   }
+  .summary-section { margin-bottom: 1.5rem; }
+  .summary-section:last-child { margin-bottom: 0; }
+  .summary-heading { font-size: 11px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); margin-bottom: 6px; }
+  .summary-body { font-size: 14px; line-height: 1.8; color: var(--text); }
+  .summary-divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+  .learning-tag { display: inline-block; background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); font-size: 12px; padding: 3px 10px; border-radius: 20px; margin: 3px 3px 3px 0; font-family: var(--mono); }
   .copy-confirm { font-size: 13px; color: var(--success); margin-top: 8px; display: none; font-family: var(--mono); }
   .hint { font-size: 12px; color: var(--text-faint); margin-top: 6px; line-height: 1.5; }
 
-  @media (max-width: 480px) {
+  @media (max-width: 500px) {
     .conflict-grid { grid-template-columns: 1fr; }
     .header-sub, .progress-label { display: none; }
     .main { padding: 1.5rem 1rem 3rem; }
@@ -153,36 +155,43 @@
 
 <header class="page-header">
   <span class="vt-badge">VT</span>
-  <span class="header-title">ENGE 1216 — Team Conflict Extension Request</span>
+  <span class="header-title">ENGE 1216 — Team Conflict Resolution Journal</span>
   <span class="header-sub">First-Year Engineering</span>
 </header>
 
 <main class="main">
 
-  <div class="progress-bar">
-    <div class="progress-step"><div class="progress-dot active" id="dot-0">1</div><span class="progress-label active" id="lbl-0">Conflict type</span></div>
-    <div class="progress-line"></div>
-    <div class="progress-step"><div class="progress-dot" id="dot-1">2</div><span class="progress-label" id="lbl-1">Situation</span></div>
-    <div class="progress-line"></div>
-    <div class="progress-step"><div class="progress-dot" id="dot-2">3</div><span class="progress-label" id="lbl-2">Eligibility</span></div>
-    <div class="progress-line"></div>
-    <div class="progress-step"><div class="progress-dot" id="dot-3">4</div><span class="progress-label" id="lbl-3">Email draft</span></div>
+  <div class="progress-wrap">
+    <div class="progress-bar">
+      <div class="progress-step"><div class="progress-dot active" id="dot-0">1</div><span class="progress-label active" id="lbl-0">Conflict</span></div>
+      <div class="progress-line"></div>
+      <div class="progress-step"><div class="progress-dot" id="dot-1">2</div><span class="progress-label" id="lbl-1">Communication</span></div>
+      <div class="progress-line"></div>
+      <div class="progress-step"><div class="progress-dot" id="dot-2">3</div><span class="progress-label" id="lbl-2">Situation</span></div>
+      <div class="progress-line"></div>
+      <div class="progress-step"><div class="progress-dot" id="dot-3">4</div><span class="progress-label" id="lbl-3">Resolution</span></div>
+      <div class="progress-line"></div>
+      <div class="progress-step"><div class="progress-dot" id="dot-4">5</div><span class="progress-label" id="lbl-4">Reflection</span></div>
+      <div class="progress-line"></div>
+      <div class="progress-step"><div class="progress-dot" id="dot-5">6</div><span class="progress-label" id="lbl-5">Summary</span></div>
+    </div>
   </div>
 
-  <!-- Step 0 -->
+  <!-- ── STEP 0: Conflict Type ── -->
   <div class="step active" id="step-0">
-    <div class="step-eyebrow">Step 1 of 4</div>
-    <div class="step-title">What type of team conflict are you facing?</div>
+    <div class="step-eyebrow">Step 1 of 6</div>
+    <div class="step-title">What kind of conflict is your team facing?</div>
+    <div class="step-subtitle">Identifying the type of conflict is the first step toward resolving it effectively.</div>
     <div class="conflict-grid">
       <button class="conflict-card" onclick="selectConflict('communication', this)">
         <span class="cc-icon">💬</span>
         <span class="cc-label">Communication breakdown</span>
-        <span class="cc-desc">Teammates unresponsive or unreachable</span>
+        <span class="cc-desc">Teammates not responding or going silent</span>
       </button>
       <button class="conflict-card" onclick="selectConflict('contribution', this)">
         <span class="cc-icon">⚖️</span>
         <span class="cc-label">Unequal contribution</span>
-        <span class="cc-desc">Some members not doing their fair share</span>
+        <span class="cc-desc">Work not being distributed or completed fairly</span>
       </button>
       <button class="conflict-card" onclick="selectConflict('scheduling', this)">
         <span class="cc-icon">📅</span>
@@ -192,113 +201,393 @@
       <button class="conflict-card" onclick="selectConflict('quality', this)">
         <span class="cc-icon">📝</span>
         <span class="cc-label">Quality disagreement</span>
-        <span class="cc-desc">Disputes on approach or work standards</span>
+        <span class="cc-desc">Disagreements on standards or direction</span>
+      </button>
+      <button class="conflict-card" onclick="selectConflict('interpersonal', this)">
+        <span class="cc-icon">🤝</span>
+        <span class="cc-label">Interpersonal tension</span>
+        <span class="cc-desc">Friction or discomfort between team members</span>
+      </button>
+      <button class="conflict-card" onclick="selectConflict('roles', this)">
+        <span class="cc-icon">🗂️</span>
+        <span class="cc-label">Unclear roles</span>
+        <span class="cc-desc">Confusion about who is responsible for what</span>
       </button>
     </div>
     <div class="btn-row">
-      <button class="btn btn-primary" id="btn-step0-next" onclick="goStep(1)" disabled>Next →</button>
+      <button class="btn btn-primary" id="btn-s0" onclick="goStep(1)" disabled>Next →</button>
     </div>
   </div>
 
-  <!-- Step 1 -->
+  <!-- ── STEP 1: Communication Attempts ── -->
   <div class="step" id="step-1">
-    <div class="step-eyebrow">Step 2 of 4</div>
-    <div class="step-title">Tell us about the situation</div>
-    <div class="card">
-      <div class="form-group">
-        <label class="field-label">Assignment name</label>
-        <input type="text" id="assignment" placeholder="e.g. Design Memo, Final Project Report…">
-      </div>
+    <div class="step-eyebrow">Step 2 of 6</div>
+    <div class="step-title">How did you try to communicate?</div>
+    <div class="step-subtitle">Check every method your team has already used to address this conflict. Being proactive about communication is a core engineering teamwork skill.</div>
+
+    <div class="tip-box tip-info" style="margin-bottom:1.25rem;">
+      In professional engineering teams, documenting your communication attempts is just as important as making them. This step helps you build that habit.
+    </div>
+
+    <div class="comm-grid" id="comm-grid">
+      <label class="comm-item" onclick="toggleComm(this)">
+        <input type="checkbox" value="text">
+        <div>
+          <div class="comm-item-label">Text message</div>
+          <div class="comm-item-desc">Direct SMS or messaging app (iMessage, WhatsApp, etc.)</div>
+        </div>
+      </label>
+      <label class="comm-item" onclick="toggleComm(this)">
+        <input type="checkbox" value="email">
+        <div>
+          <div class="comm-item-label">Email</div>
+          <div class="comm-item-desc">Sent a formal or informal email to the teammate</div>
+        </div>
+      </label>
+      <label class="comm-item" onclick="toggleComm(this)">
+        <input type="checkbox" value="slack">
+        <div>
+          <div class="comm-item-label">Slack / Teams / Discord</div>
+          <div class="comm-item-desc">Used a team chat platform to reach out</div>
+        </div>
+      </label>
+      <label class="comm-item" onclick="toggleComm(this)">
+        <input type="checkbox" value="inperson">
+        <div>
+          <div class="comm-item-label">In-person conversation</div>
+          <div class="comm-item-desc">Talked face-to-face during class, lab, or elsewhere</div>
+        </div>
+      </label>
+      <label class="comm-item" onclick="toggleComm(this)">
+        <input type="checkbox" value="meeting">
+        <div>
+          <div class="comm-item-label">Team meeting (virtual or in-person)</div>
+          <div class="comm-item-desc">Called or attended a dedicated team meeting to discuss the issue</div>
+        </div>
+      </label>
+      <label class="comm-item" onclick="toggleComm(this)">
+        <input type="checkbox" value="phone">
+        <div>
+          <div class="comm-item-label">Phone call</div>
+          <div class="comm-item-desc">Called the teammate directly</div>
+        </div>
+      </label>
+      <label class="comm-item comm-none" id="comm-none-item" onclick="toggleNone(this)">
+        <input type="checkbox" value="none" id="comm-none-cb">
+        <div>
+          <div class="comm-item-label">I have not reached out yet</div>
+          <div class="comm-item-desc">I haven't communicated about this conflict yet</div>
+        </div>
+      </label>
+    </div>
+
+    <div id="comm-warning" style="display:none;" class="tip-box tip-warn">
+      Before documenting a conflict, try reaching out first. A quick text or message is often all it takes. Engineers resolve most team issues through direct, respectful communication before escalating.
+    </div>
+
+    <div class="form-group" style="margin-top:1rem;">
+      <label class="field-label">When did you first notice this conflict?</label>
+      <input type="datetime-local" id="conflict-date">
+    </div>
+    <div class="form-group">
+      <label class="field-label">How many times have you attempted to communicate?</label>
+      <select id="comm-count">
+        <option value="">Select…</option>
+        <option value="1">Once</option>
+        <option value="2">Twice</option>
+        <option value="3">Three times</option>
+        <option value="4+">Four or more times</option>
+      </select>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="goStep(0)">← Back</button>
+      <button class="btn btn-primary" onclick="validateStep1()">Next →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: Situation ── -->
+  <div class="step" id="step-2">
+    <div class="step-eyebrow">Step 3 of 6</div>
+    <div class="step-title">Describe the situation</div>
+    <div class="step-subtitle">Be factual and specific. Focus on observable behaviors and impacts, not assumptions about intentions.</div>
+
+    <div class="tip-box tip-info">
+      <strong>Engineering tip:</strong> Good conflict documentation uses facts, not feelings. Instead of "they don't care," write "they have not responded to 3 messages over 5 days."
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
       <div class="form-group">
         <label class="field-label">Your name &amp; section</label>
         <input type="text" id="student-name" placeholder="e.g. Alex Smith — Section 03, 2:30 PM">
-        <p class="hint">This will appear in the email signature per course email guidelines.</p>
       </div>
       <div class="form-group">
-        <label class="field-label">Assignment deadline</label>
-        <input type="datetime-local" id="deadline">
+        <label class="field-label">Team member(s) involved (first names only)</label>
+        <input type="text" id="members-involved" placeholder="e.g. Jordan, Sam">
       </div>
-    </div>
-    <div class="card">
       <div class="form-group">
-        <label class="field-label">Describe what happened</label>
-        <textarea id="situation" rows="4" placeholder="Be specific. e.g. Two teammates have not responded to messages on Slack or email for over a week. We attempted to contact them on three separate occasions…"></textarea>
-      </div>
-      <div class="form-group" style="margin-bottom:0;">
-        <label class="field-label">What has your team already tried?</label>
-        <textarea id="tried" rows="3" placeholder="e.g. We held an emergency team meeting on Monday, reassigned tasks, and sent documented messages asking for a status update…"></textarea>
-        <p class="hint">Instructors need to see prior effort before granting extensions.</p>
+        <label class="field-label">Which assignment is this affecting?</label>
+        <input type="text" id="assignment" placeholder="e.g. Design Memo, Final Project Report…">
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn" onclick="goStep(0)">← Back</button>
-      <button class="btn btn-primary" onclick="validateStep1()">Check eligibility →</button>
-    </div>
-  </div>
 
-  <!-- Step 2 -->
-  <div class="step" id="step-2">
-    <div class="step-eyebrow">Step 3 of 4</div>
-    <div class="step-title">Eligibility check</div>
-    <div class="card"><ul class="checklist" id="checklist"></ul></div>
-    <div id="eligibility-alert"></div>
+    <div class="reflection-card">
+      <div class="reflection-label">What specifically happened? (facts only)</div>
+      <div class="reflection-hint">Describe the observable situation. Dates, actions, and specific behaviors are more useful than general impressions.</div>
+      <textarea id="situation" rows="4" placeholder="e.g. Between April 1–7, Jordan did not respond to 3 Slack messages and missed our scheduled team meeting on April 3. The section they were responsible for — the data analysis — remains incomplete…"></textarea>
+    </div>
+
+    <div class="reflection-card">
+      <div class="reflection-label">How has this affected the team and the work?</div>
+      <div class="reflection-hint">Describe the impact on your project, your teammates, and your team dynamic.</div>
+      <textarea id="impact" rows="3" placeholder="e.g. The rest of the team has had to pause our own sections to wait for the data, which has created a bottleneck. The team morale has also been affected because members feel the workload is unfair…"></textarea>
+    </div>
+
     <div class="btn-row">
       <button class="btn" onclick="goStep(1)">← Back</button>
-      <button class="btn btn-primary" id="btn-generate" onclick="goStep(3)" disabled>Generate email draft →</button>
+      <button class="btn btn-primary" onclick="validateStep2()">Next →</button>
     </div>
   </div>
 
-  <!-- Step 3 -->
+  <!-- ── STEP 3: Resolution Strategies ── -->
   <div class="step" id="step-3">
-    <div class="step-eyebrow">Step 4 of 4</div>
-    <div class="step-title">Your extension request email</div>
-    <div class="email-box" id="email-content"></div>
+    <div class="step-eyebrow">Step 4 of 6</div>
+    <div class="step-title">Choose your resolution strategies</div>
+    <div class="step-subtitle">Select the approaches you plan to use (or have already used) to resolve this conflict. These are real techniques used by professional engineering teams.</div>
+
+    <div class="strategy-grid" id="strategy-grid">
+      <div class="strategy-item" onclick="toggleStrategy('direct', this)">
+        <div class="strategy-title">Direct conversation</div>
+        <div class="strategy-desc">Have a private, respectful one-on-one conversation to understand what's going on. Lead with curiosity, not accusation.</div>
+      </div>
+      <div class="strategy-item" onclick="toggleStrategy('redistribute', this)">
+        <div class="strategy-title">Redistribute and reassign tasks</div>
+        <div class="strategy-desc">Formally reassign tasks with clear individual ownership and a specific deadline — documented in a shared space.</div>
+      </div>
+      <div class="strategy-item" onclick="toggleStrategy('checkin', this)">
+        <div class="strategy-title">Establish regular check-ins</div>
+        <div class="strategy-desc">Schedule brief recurring team check-ins (even 10 minutes) to surface blockers early before they become bigger problems.</div>
+      </div>
+      <div class="strategy-item" onclick="toggleStrategy('written', this)">
+        <div class="strategy-title">Put expectations in writing</div>
+        <div class="strategy-desc">Write down what each person agreed to do and by when — in a shared doc or message thread — so there is no ambiguity.</div>
+      </div>
+      <div class="strategy-item" onclick="toggleStrategy('mediation', this)">
+        <div class="strategy-title">Involve a neutral third party</div>
+        <div class="strategy-desc">Ask another trusted teammate to help mediate, or seek guidance from a GTA or instructor if the conflict can't be resolved internally.</div>
+      </div>
+      <div class="strategy-item" onclick="toggleStrategy('team_contract', this)">
+        <div class="strategy-title">Revisit the team contract</div>
+        <div class="strategy-desc">Go back to the team contract you signed at the start of the semester. Use it as an objective reference point for expected behavior.</div>
+      </div>
+      <div class="strategy-item" onclick="toggleStrategy('async', this)">
+        <div class="strategy-title">Switch to asynchronous work</div>
+        <div class="strategy-desc">Restructure the remaining work so teammates can contribute independently and on their own schedule, reducing coordination friction.</div>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-top: 1rem;">
+      <label class="field-label">Describe your specific resolution plan</label>
+      <textarea id="resolution-plan" rows="4" placeholder="e.g. I will reach out to Jordan directly tonight to check if they are okay and understand what is blocking them. If there is no response by Thursday morning, the team will meet to redistribute the data analysis section between the remaining three members and update our shared task tracker…"></textarea>
+    </div>
+
     <div class="btn-row">
       <button class="btn" onclick="goStep(2)">← Back</button>
-      <button class="btn btn-primary" onclick="copyEmail()">Copy email</button>
+      <button class="btn btn-primary" onclick="validateStep3()">Next →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 4: Reflection ── -->
+  <div class="step" id="step-4">
+    <div class="step-eyebrow">Step 5 of 6</div>
+    <div class="step-title">Reflect on what you're learning</div>
+    <div class="step-subtitle">This is the most important step. Engineering is a team sport — how you navigate conflict is a skill you'll use your entire career.</div>
+
+    <div class="tip-box tip-success">
+      There are no right or wrong answers here. Honest reflection is what turns a difficult experience into a real learning opportunity.
+    </div>
+
+    <div class="reflection-card" style="margin-top:1rem;">
+      <div class="reflection-label">What could you or your team have done earlier to prevent this conflict?</div>
+      <div class="reflection-hint">Think about communication habits, task clarity, or team norms that might have helped.</div>
+      <textarea id="reflect-prevent" rows="3" placeholder="e.g. We could have set clearer individual deadlines in our team contract instead of just a final due date. We also never checked in as a team between meetings, so issues went unnoticed…"></textarea>
+    </div>
+
+    <div class="reflection-card">
+      <div class="reflection-label">What did you learn about yourself as a team member through this experience?</div>
+      <div class="reflection-hint">Think about how you responded, what was hard, and what you'd do differently.</div>
+      <textarea id="reflect-self" rows="3" placeholder="e.g. I realized I was avoiding bringing up the issue because I didn't want to cause tension. I learned that addressing things early, even when uncomfortable, is better for the whole team…"></textarea>
+    </div>
+
+    <div class="reflection-card">
+      <div class="reflection-label">What is one thing you will do differently in your next team project?</div>
+      <div class="reflection-hint">Be specific — a concrete commitment is more useful than a vague intention.</div>
+      <textarea id="reflect-next" rows="3" placeholder="e.g. I will suggest we set individual sub-deadlines at the start of every assignment and do a quick Monday check-in message so no one falls behind silently…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="goStep(3)">← Back</button>
+      <button class="btn btn-primary" onclick="validateStep4()">Generate my resolution summary →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 5: Summary Document ── -->
+  <div class="step" id="step-5">
+    <div class="step-eyebrow">Step 6 of 6</div>
+    <div class="step-title">Your conflict resolution summary</div>
+    <div class="step-subtitle">This document captures what happened, how you responded, and what you learned. Save or share it as a record of your professional development.</div>
+
+    <div class="summary-doc" id="summary-doc"></div>
+
+    <div class="btn-row" style="margin-top:1.25rem;">
+      <button class="btn" onclick="goStep(4)">← Back</button>
+      <button class="btn btn-primary" onclick="copyDoc()">Copy summary</button>
+      <button class="btn" onclick="window.print()">Print / Save PDF</button>
     </div>
     <div class="copy-confirm" id="copy-confirm">✓ Copied to clipboard</div>
-    <p class="hint" style="margin-top:1rem;">Review and personalise before sending. Make sure all team members agree on the content.</p>
+    <p class="hint" style="margin-top:1rem;">You may be asked to submit this as part of your course participation or peer evaluation. Keep a personal copy for your own records.</p>
   </div>
 
 </main>
 
 <script>
   let conflictType = '';
-  let generatedEmail = '';
+  let selectedStrategies = [];
+  let commMethods = [];
+  let noneSelected = false;
 
-  const conflictData = {
-    communication: {
-      label: 'communication breakdown (teammates unresponsive)',
-      plan: 'We will redistribute the unfinished sections among the remaining active members, set firm internal sub-deadlines for each part, and use read-receipt messaging to confirm task acknowledgment.',
-      practice: 'Going forward, we will enforce a 24-hour response policy on all team messages, maintain a shared task tracker visible to all members, and escalate to the instructor promptly if a member becomes unresponsive again.'
-    },
-    contribution: {
-      label: 'unequal contribution among team members',
-      plan: 'We will explicitly reassign all outstanding tasks by name with individual sub-deadlines, and conduct a team review session before the final submission to ensure all parts meet course expectations.',
-      practice: 'Going forward, we will hold weekly check-ins to review individual progress, keep a shared contribution log, and address imbalances early rather than allowing them to affect deliverable quality.'
-    },
-    scheduling: {
-      label: 'scheduling conflicts preventing team coordination',
-      plan: 'We will complete the remaining work asynchronously via a shared document with clearly divided sections, each assigned to a specific member with an agreed internal deadline 24 hours before the submission.',
-      practice: 'Going forward, we will create a shared availability calendar at the start of each major assignment, identify conflicts proactively, and default to async collaboration when synchronous meetings are not possible.'
-    },
-    quality: {
-      label: 'disagreement on work quality or approach',
-      plan: 'We will hold a focused alignment meeting to agree on the approach, divide the remaining work based on individual strengths, and conduct a single consolidated review before submitting.',
-      practice: 'Going forward, we will agree on an outline and quality standards before dividing work, and resolve approach disagreements through structured discussion within 24 hours rather than allowing them to stall progress.'
-    }
+  const conflictLabels = {
+    communication: 'Communication breakdown — teammates unresponsive',
+    contribution: 'Unequal contribution among team members',
+    scheduling: 'Scheduling conflicts preventing coordination',
+    quality: 'Disagreement on work quality or approach',
+    interpersonal: 'Interpersonal tension between members',
+    roles: 'Unclear roles and responsibilities'
   };
 
+  const conflictTips = {
+    communication: 'In engineering workplaces, silent team members are often dealing with personal challenges — approach with empathy before assuming disengagement.',
+    contribution: 'Unequal contribution is one of the most common team issues. Clear, documented task ownership from the start prevents most cases.',
+    scheduling: 'Asynchronous work is a professional engineering norm. You do not always need to meet — you need clear handoffs.',
+    quality: 'Disagreements about quality can actually lead to better outcomes if managed well. Try to find the strongest elements of each approach.',
+    interpersonal: 'Interpersonal conflict is normal. The key is addressing it directly and early — left unaddressed, it compounds over time.',
+    roles: 'Role ambiguity is the #1 cause of duplicated or missed work. A simple shared task list with owner names solves most of this.'
+  };
+
+  const strategyLabels = {
+    direct: 'Direct one-on-one conversation',
+    redistribute: 'Redistribute and reassign tasks',
+    checkin: 'Establish regular check-ins',
+    written: 'Put expectations in writing',
+    mediation: 'Involve a neutral third party',
+    team_contract: 'Revisit the team contract',
+    async: 'Switch to asynchronous work'
+  };
+
+  // Step 0
   function selectConflict(type, btn) {
     conflictType = type;
     document.querySelectorAll('.conflict-card').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-    document.getElementById('btn-step0-next').disabled = false;
+    document.getElementById('btn-s0').disabled = false;
   }
 
+  // Step 1 - communication
+  function toggleComm(label) {
+    const cb = label.querySelector('input[type="checkbox"]');
+    // handled by browser, just update styling
+    setTimeout(() => {
+      if (cb.checked) {
+        label.classList.add('checked');
+        // if checking a real method, uncheck "none"
+        if (cb.value !== 'none') {
+          const noneCb = document.getElementById('comm-none-cb');
+          if (noneCb.checked) {
+            noneCb.checked = false;
+            document.getElementById('comm-none-item').classList.remove('checked');
+            noneSelected = false;
+          }
+        }
+      } else {
+        label.classList.remove('checked');
+      }
+      updateCommMethods();
+    }, 0);
+  }
+
+  function toggleNone(label) {
+    const cb = label.querySelector('input[type="checkbox"]');
+    setTimeout(() => {
+      if (cb.checked) {
+        // uncheck all others
+        document.querySelectorAll('#comm-grid input[type="checkbox"]').forEach(c => {
+          if (c.value !== 'none') { c.checked = false; c.closest('.comm-item').classList.remove('checked'); }
+        });
+        label.classList.add('checked');
+        noneSelected = true;
+      } else {
+        label.classList.remove('checked');
+        noneSelected = false;
+      }
+      updateCommMethods();
+    }, 0);
+  }
+
+  function updateCommMethods() {
+    commMethods = [];
+    document.querySelectorAll('#comm-grid input[type="checkbox"]:checked').forEach(cb => {
+      if (cb.value !== 'none') commMethods.push(cb.value);
+    });
+    const warn = document.getElementById('comm-warning');
+    warn.style.display = noneSelected ? 'block' : 'none';
+  }
+
+  function validateStep1() {
+    const date = document.getElementById('conflict-date').value;
+    const count = document.getElementById('comm-count').value;
+    if (!date || !count) { alert('Please fill in when you noticed the conflict and how many times you have communicated.'); return; }
+    goStep(2);
+  }
+
+  // Step 2
+  function validateStep2() {
+    const name = document.getElementById('student-name').value.trim();
+    const assignment = document.getElementById('assignment').value.trim();
+    const situation = document.getElementById('situation').value.trim();
+    const impact = document.getElementById('impact').value.trim();
+    if (!name || !assignment || !situation || !impact) { alert('Please fill in all fields before continuing.'); return; }
+    goStep(3);
+  }
+
+  // Step 3
+  function toggleStrategy(key, el) {
+    el.classList.toggle('selected');
+    if (el.classList.contains('selected')) {
+      if (!selectedStrategies.includes(key)) selectedStrategies.push(key);
+    } else {
+      selectedStrategies = selectedStrategies.filter(s => s !== key);
+    }
+  }
+
+  function validateStep3() {
+    const plan = document.getElementById('resolution-plan').value.trim();
+    if (selectedStrategies.length === 0) { alert('Please select at least one resolution strategy.'); return; }
+    if (!plan) { alert('Please describe your specific resolution plan.'); return; }
+    goStep(4);
+  }
+
+  // Step 4
+  function validateStep4() {
+    const r1 = document.getElementById('reflect-prevent').value.trim();
+    const r2 = document.getElementById('reflect-self').value.trim();
+    const r3 = document.getElementById('reflect-next').value.trim();
+    if (!r1 || !r2 || !r3) { alert('Please complete all three reflection prompts before continuing.'); return; }
+    goStep(5);
+  }
+
+  // Progress
   function setProgress(n) {
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
       const dot = document.getElementById('dot-' + i);
       const lbl = document.getElementById('lbl-' + i);
       dot.className = 'progress-dot';
@@ -314,108 +603,137 @@
     document.getElementById('step-' + n).classList.add('active');
     setProgress(n);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (n === 3) buildEmail();
+    if (n === 5) buildSummary();
   }
 
-  function validateStep1() {
-    const assignment = document.getElementById('assignment').value.trim();
+  // Build summary
+  function buildSummary() {
     const name = document.getElementById('student-name').value.trim();
-    const deadline = document.getElementById('deadline').value;
-    const situation = document.getElementById('situation').value.trim();
-    const tried = document.getElementById('tried').value.trim();
-
-    if (!assignment || !deadline || !situation || !tried || !name) {
-      alert('Please fill in all fields before continuing.');
-      return;
-    }
-
-    const deadlineDate = new Date(deadline);
-    const hoursUntil = (deadlineDate - new Date()) / 3600000;
-    let items = [];
-    let canProceed = true;
-
-    if (hoursUntil >= 24) {
-      items.push({ s: 'pass', t: `Submitted at least 24 hours before deadline — ${Math.round(hoursUntil)} hours remaining` });
-    } else if (hoursUntil > 0) {
-      items.push({ s: 'fail', t: `Only ${Math.round(hoursUntil)} hours until deadline — syllabus requires 24+ hours notice` });
-      canProceed = false;
-    } else {
-      items.push({ s: 'fail', t: 'Deadline has already passed — late requests are generally not accepted without documentation' });
-      canProceed = false;
-    }
-
-    items.push({ s: 'pass', t: `Conflict type identified: ${conflictData[conflictType].label}` });
-    items.push(situation.length > 60
-      ? { s: 'pass', t: 'Situation described with sufficient detail' }
-      : { s: 'warn', t: 'Situation is brief — add more specific detail about what happened and when' });
-    items.push(tried.length > 40
-      ? { s: 'pass', t: 'Prior resolution attempts documented — strengthens your request' }
-      : { s: 'warn', t: 'Be more specific about what the team already tried to resolve this' });
-
-    const icons = { pass: '✓', fail: '✗', warn: '!' };
-    document.getElementById('checklist').innerHTML = items.map(item =>
-      `<li><span class="check-icon check-${item.s}">${icons[item.s]}</span><span>${item.t}</span></li>`
-    ).join('');
-
-    const alertEl = document.getElementById('eligibility-alert');
-    const btn = document.getElementById('btn-generate');
-    if (!canProceed) {
-      alertEl.innerHTML = '<div class="alert alert-danger">Your request does not meet the 24-hour requirement. Contact your instructor directly as soon as possible and bring any documentation you have.</div>';
-      btn.disabled = true;
-    } else {
-      alertEl.innerHTML = '<div class="alert alert-success">Your request meets the syllabus requirements. Proceed to generate your email draft.</div>';
-      btn.disabled = false;
-    }
-
-    goStep(2);
-  }
-
-  function buildEmail() {
     const assignment = document.getElementById('assignment').value.trim();
-    const name = document.getElementById('student-name').value.trim();
-    const deadline = document.getElementById('deadline').value;
+    const members = document.getElementById('members-involved').value.trim();
     const situation = document.getElementById('situation').value.trim();
-    const tried = document.getElementById('tried').value.trim();
-
-    const deadlineDate = new Date(deadline);
-    const fmt = d => d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    const newDeadline = new Date(deadlineDate.getTime() + 48 * 3600000);
+    const impact = document.getElementById('impact').value.trim();
+    const plan = document.getElementById('resolution-plan').value.trim();
+    const r1 = document.getElementById('reflect-prevent').value.trim();
+    const r2 = document.getElementById('reflect-self').value.trim();
+    const r3 = document.getElementById('reflect-next').value.trim();
+    const conflictDate = document.getElementById('conflict-date').value;
+    const commCount = document.getElementById('comm-count').value;
     const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-    const data = conflictData[conflictType];
+    const conflictDateStr = conflictDate ? new Date(conflictDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Not specified';
 
-    generatedEmail =
-`Subject: Extension Request — ${assignment} — Team Conflict
+    const commLabels = { text: 'Text message', email: 'Email', slack: 'Slack/Teams/Discord', inperson: 'In-person conversation', meeting: 'Team meeting', phone: 'Phone call' };
+    const commList = commMethods.length > 0 ? commMethods.map(m => commLabels[m] || m).join(', ') : 'No communication attempts made yet';
 
-Dear Dr. Dogan,
+    const stratList = selectedStrategies.map(s => strategyLabels[s]).join(', ');
 
-We are writing on behalf of our team to formally request an extension for the ${assignment}, currently due on ${fmt(deadlineDate)}.
+    const doc = document.getElementById('summary-doc');
+    doc.innerHTML = `
+      <div class="summary-section">
+        <div class="summary-heading">Team Conflict Resolution Summary</div>
+        <div class="summary-body" style="font-size:13px; color: var(--text-muted);">
+          ${name} &nbsp;·&nbsp; ENGE 1216 &nbsp;·&nbsp; ${today}
+        </div>
+      </div>
+      <hr class="summary-divider">
 
-Our team has experienced a ${data.label} that has significantly impacted our ability to complete the assignment on time. Specifically: ${situation}
+      <div class="summary-section">
+        <div class="summary-heading">Conflict Overview</div>
+        <div class="summary-body">
+          <strong>Type:</strong> ${conflictLabels[conflictType]}<br>
+          <strong>Assignment affected:</strong> ${assignment}<br>
+          <strong>Team members involved:</strong> ${members || 'Not specified'}<br>
+          <strong>First noticed:</strong> ${conflictDateStr}
+        </div>
+      </div>
+      <hr class="summary-divider">
 
-Before submitting this request, our team made the following attempts to resolve the situation: ${tried}
+      <div class="summary-section">
+        <div class="summary-heading">Communication Attempts</div>
+        <div class="summary-body">
+          <strong>Methods used:</strong> ${commList}<br>
+          <strong>Number of attempts:</strong> ${commCount}
+        </div>
+        <div style="margin-top:8px; font-size:13px; color: var(--text-muted); font-style: italic;">${conflictTips[conflictType]}</div>
+      </div>
+      <hr class="summary-divider">
 
-Despite these efforts, we have not been able to recover the lost progress without additional time.
+      <div class="summary-section">
+        <div class="summary-heading">What Happened</div>
+        <div class="summary-body">${situation}</div>
+      </div>
+      <hr class="summary-divider">
 
-Completion Plan:
-${data.plan} We are requesting an extension to ${fmt(newDeadline)}, which would give us 48 additional hours to complete and review the work to the standard expected in this course.
+      <div class="summary-section">
+        <div class="summary-heading">Impact on the Team</div>
+        <div class="summary-body">${impact}</div>
+      </div>
+      <hr class="summary-divider">
 
-Team Practice Adjustments:
-${data.practice}
+      <div class="summary-section">
+        <div class="summary-heading">Resolution Strategies Selected</div>
+        <div style="margin-bottom:8px;">
+          ${selectedStrategies.map(s => `<span class="learning-tag">${strategyLabels[s]}</span>`).join('')}
+        </div>
+        <div class="summary-heading" style="margin-top:10px;">Resolution Plan</div>
+        <div class="summary-body">${plan}</div>
+      </div>
+      <hr class="summary-divider">
 
-We take full responsibility for addressing this situation proactively and are committed to delivering quality work by the proposed new deadline. Please let us know if you would like to discuss this further.
+      <div class="summary-section">
+        <div class="summary-heading">Reflection</div>
+        <div class="summary-body">
+          <strong>What could have prevented this:</strong><br>
+          ${r1}<br><br>
+          <strong>What I learned about myself as a team member:</strong><br>
+          ${r2}<br><br>
+          <strong>What I will do differently next time:</strong><br>
+          ${r3}
+        </div>
+      </div>
+    `;
 
-Thank you sincerely for your time and consideration.
-
-Respectfully,
-${name}
-(Submitting on behalf of the team)
-ENGE 1216 | ${today}`;
-
-    document.getElementById('email-content').textContent = generatedEmail;
+    // Build plain text version for copy
+    window._summaryText = [
+      `TEAM CONFLICT RESOLUTION SUMMARY`,
+      `${name} · ENGE 1216 · ${today}`,
+      ``,
+      `CONFLICT OVERVIEW`,
+      `Type: ${conflictLabels[conflictType]}`,
+      `Assignment affected: ${assignment}`,
+      `Team members involved: ${members || 'Not specified'}`,
+      `First noticed: ${conflictDateStr}`,
+      ``,
+      `COMMUNICATION ATTEMPTS`,
+      `Methods used: ${commList}`,
+      `Number of attempts: ${commCount}`,
+      ``,
+      `WHAT HAPPENED`,
+      situation,
+      ``,
+      `IMPACT ON THE TEAM`,
+      impact,
+      ``,
+      `RESOLUTION STRATEGIES`,
+      stratList,
+      ``,
+      `RESOLUTION PLAN`,
+      plan,
+      ``,
+      `REFLECTION`,
+      `What could have prevented this:`,
+      r1,
+      ``,
+      `What I learned about myself as a team member:`,
+      r2,
+      ``,
+      `What I will do differently next time:`,
+      r3
+    ].join('\n');
   }
 
-  function copyEmail() {
-    navigator.clipboard.writeText(generatedEmail).then(() => {
+  function copyDoc() {
+    navigator.clipboard.writeText(window._summaryText || '').then(() => {
       const el = document.getElementById('copy-confirm');
       el.style.display = 'block';
       setTimeout(() => el.style.display = 'none', 2500);
