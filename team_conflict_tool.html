@@ -30,7 +30,6 @@
 
   .main { max-width: 700px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 
-  /* Progress */
   .progress-wrap { margin-bottom: 2.5rem; }
   .progress-bar { display: flex; align-items: center; }
   .progress-step { display: flex; align-items: center; gap: 6px; flex: 1; }
@@ -49,7 +48,6 @@
   .progress-label.done { color: var(--success); }
   .progress-line { flex: 1; height: 1px; background: var(--border); margin: 0 6px; }
 
-  /* Steps */
   .step { display: none; animation: fadeIn 0.2s ease; }
   .step.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -58,7 +56,6 @@
   .step-title { font-size: 22px; font-weight: 500; margin-bottom: 6px; line-height: 1.3; }
   .step-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 1.75rem; line-height: 1.6; }
 
-  /* Conflict type cards */
   .conflict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem; }
   .conflict-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.1rem; cursor: pointer; transition: all 0.15s; text-align: left; }
   .conflict-card:hover { border-color: var(--border-strong); background: var(--surface2); }
@@ -67,7 +64,6 @@
   .cc-label { font-size: 14px; font-weight: 500; display: block; margin-bottom: 4px; }
   .cc-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
-  /* Communication checklist */
   .comm-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
   .comm-item {
     display: flex; align-items: center; gap: 12px;
@@ -83,17 +79,13 @@
   .comm-none { background: var(--warning-bg); border-color: var(--warning-border) !important; }
   .comm-none.checked { background: var(--warning-bg); border-color: var(--warning-border); }
 
-  /* Reflection prompts */
   .reflection-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-lg); padding: 1.25rem 1.4rem; margin-bottom: 1rem;
   }
-  .reflection-label {
-    font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px;
-  }
+  .reflection-label { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
   .reflection-hint { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.5; }
 
-  /* Form elements */
   .form-group { margin-bottom: 1.1rem; }
   .field-label { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; display: block; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.05em; }
   input[type="text"], input[type="datetime-local"], textarea, select {
@@ -107,21 +99,18 @@
 
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.4rem; margin-bottom: 1rem; }
 
-  /* Buttons */
   .btn-row { display: flex; gap: 10px; margin-top: 1.75rem; flex-wrap: wrap; }
-  .btn { font-family: var(--font); font-size: 14px; font-weight: 500; padding: 10px 22px; border-radius: var(--radius); cursor: pointer; border: 1.5px solid var(--border-strong); background: var(--surface); color: var(--text); transition: all 0.15s; }
+  .btn { font-family: var(--font); font-size: 14px; font-weight: 500; padding: 10px 22px; border-radius: var(--radius); cursor: pointer; border: 1.5px solid var(--border-strong); background: var(--surface); color: var(--text); transition: all 0.15s; text-decoration: none; display: inline-block; }
   .btn:hover { background: var(--surface2); }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .btn-primary:hover { opacity: 0.82; background: var(--text); }
+  .btn-primary:hover { opacity: 0.82; background: var(--text); color: var(--bg); }
 
-  /* Info boxes */
   .tip-box { padding: 12px 16px; border-radius: var(--radius); font-size: 13.5px; line-height: 1.6; border: 1px solid; margin-bottom: 1rem; }
   .tip-info { background: var(--info-bg); color: var(--info); border-color: var(--info-border); }
   .tip-warn { background: var(--warning-bg); color: var(--warning); border-color: var(--warning-border); }
   .tip-success { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
 
-  /* Learning strategies */
   .strategy-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
   .strategy-item { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; transition: all 0.15s; }
   .strategy-item:hover { border-color: var(--border-strong); }
@@ -129,7 +118,6 @@
   .strategy-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
   .strategy-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
-  /* Summary doc */
   .summary-doc {
     background: var(--surface); border: 1.5px solid var(--border);
     border-radius: var(--radius-lg); padding: 2rem;
@@ -177,7 +165,6 @@
     </div>
   </div>
 
-  <!-- ── STEP 0: Conflict Type ── -->
   <div class="step active" id="step-0">
     <div class="step-eyebrow">Step 1 of 6</div>
     <div class="step-title">What kind of conflict is your team facing?</div>
@@ -219,7 +206,6 @@
     </div>
   </div>
 
-  <!-- ── STEP 1: Communication Attempts ── -->
   <div class="step" id="step-1">
     <div class="step-eyebrow">Step 2 of 6</div>
     <div class="step-title">How did you try to communicate?</div>
@@ -306,7 +292,6 @@
     </div>
   </div>
 
-  <!-- ── STEP 2: Situation ── -->
   <div class="step" id="step-2">
     <div class="step-eyebrow">Step 3 of 6</div>
     <div class="step-title">Describe the situation</div>
@@ -349,7 +334,6 @@
     </div>
   </div>
 
-  <!-- ── STEP 3: Resolution Strategies ── -->
   <div class="step" id="step-3">
     <div class="step-eyebrow">Step 4 of 6</div>
     <div class="step-title">Choose your resolution strategies</div>
@@ -397,7 +381,6 @@
     </div>
   </div>
 
-  <!-- ── STEP 4: Reflection ── -->
   <div class="step" id="step-4">
     <div class="step-eyebrow">Step 5 of 6</div>
     <div class="step-title">Reflect on what you're learning</div>
@@ -431,7 +414,6 @@
     </div>
   </div>
 
-  <!-- ── STEP 5: Summary Document ── -->
   <div class="step" id="step-5">
     <div class="step-eyebrow">Step 6 of 6</div>
     <div class="step-title">Your conflict resolution summary</div>
@@ -442,6 +424,9 @@
     <div class="btn-row" style="margin-top:1.25rem;">
       <button class="btn" onclick="goStep(4)">← Back</button>
       <button class="btn btn-primary" onclick="copyDoc()">Copy summary</button>
+      <button class="btn" onclick="copyTeammateReminder()">Copy teammate reminder</button>
+      <button class="btn" onclick="copyInstructorNote()">Copy instructor note</button>
+      <button class="btn" id="mailto-instructor">Email instructor</button>
       <button class="btn" onclick="window.print()">Print / Save PDF</button>
     </div>
     <div class="copy-confirm" id="copy-confirm">✓ Copied to clipboard</div>
@@ -484,7 +469,6 @@
     async: 'Switch to asynchronous work'
   };
 
-  // Step 0
   function selectConflict(type, btn) {
     conflictType = type;
     document.querySelectorAll('.conflict-card').forEach(b => b.classList.remove('selected'));
@@ -492,14 +476,11 @@
     document.getElementById('btn-s0').disabled = false;
   }
 
-  // Step 1 - communication
   function toggleComm(label) {
     const cb = label.querySelector('input[type="checkbox"]');
-    // handled by browser, just update styling
     setTimeout(() => {
       if (cb.checked) {
         label.classList.add('checked');
-        // if checking a real method, uncheck "none"
         if (cb.value !== 'none') {
           const noneCb = document.getElementById('comm-none-cb');
           if (noneCb.checked) {
@@ -519,7 +500,6 @@
     const cb = label.querySelector('input[type="checkbox"]');
     setTimeout(() => {
       if (cb.checked) {
-        // uncheck all others
         document.querySelectorAll('#comm-grid input[type="checkbox"]').forEach(c => {
           if (c.value !== 'none') { c.checked = false; c.closest('.comm-item').classList.remove('checked'); }
         });
@@ -549,7 +529,6 @@
     goStep(2);
   }
 
-  // Step 2
   function validateStep2() {
     const name = document.getElementById('student-name').value.trim();
     const assignment = document.getElementById('assignment').value.trim();
@@ -559,7 +538,6 @@
     goStep(3);
   }
 
-  // Step 3
   function toggleStrategy(key, el) {
     el.classList.toggle('selected');
     if (el.classList.contains('selected')) {
@@ -576,7 +554,6 @@
     goStep(4);
   }
 
-  // Step 4
   function validateStep4() {
     const r1 = document.getElementById('reflect-prevent').value.trim();
     const r2 = document.getElementById('reflect-self').value.trim();
@@ -585,7 +562,6 @@
     goStep(5);
   }
 
-  // Progress
   function setProgress(n) {
     for (let i = 0; i < 6; i++) {
       const dot = document.getElementById('dot-' + i);
@@ -606,7 +582,6 @@
     if (n === 5) buildSummary();
   }
 
-  // Build summary
   function buildSummary() {
     const name = document.getElementById('student-name').value.trim();
     const assignment = document.getElementById('assignment').value.trim();
@@ -624,7 +599,6 @@
 
     const commLabels = { text: 'Text message', email: 'Email', slack: 'Slack/Teams/Discord', inperson: 'In-person conversation', meeting: 'Team meeting', phone: 'Phone call' };
     const commList = commMethods.length > 0 ? commMethods.map(m => commLabels[m] || m).join(', ') : 'No communication attempts made yet';
-
     const stratList = selectedStrategies.map(s => strategyLabels[s]).join(', ');
 
     const doc = document.getElementById('summary-doc');
@@ -691,9 +665,15 @@
           ${r3}
         </div>
       </div>
+
+      <div class="summary-section">
+        <div class="summary-heading">Next Step</div>
+        <div class="summary-body">
+          Use the teammate reminder first. If the issue continues, copy the instructor note or use the email button to contact the instructor.
+        </div>
+      </div>
     `;
 
-    // Build plain text version for copy
     window._summaryText = [
       `TEAM CONFLICT RESOLUTION SUMMARY`,
       `${name} · ENGE 1216 · ${today}`,
@@ -735,10 +715,60 @@
   function copyDoc() {
     navigator.clipboard.writeText(window._summaryText || '').then(() => {
       const el = document.getElementById('copy-confirm');
+      el.textContent = '✓ Copied to clipboard';
       el.style.display = 'block';
       setTimeout(() => el.style.display = 'none', 2500);
     });
   }
+
+  function copyTeammateReminder() {
+    const name = document.getElementById('student-name').value.trim();
+    const text = `Hi [Name],
+
+I wanted to check in about our team project. We need to reconnect on responsibilities and deadlines so we can keep moving forward. Please reply by [date] so we can coordinate next steps.
+
+Thank you,
+${name || '[Your Name]'}`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      const el = document.getElementById('copy-confirm');
+      el.textContent = '✓ Teammate reminder copied';
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 2500);
+    });
+  }
+
+  function copyInstructorNote() {
+    const name = document.getElementById('student-name').value.trim();
+    const text = `Hi [Instructor/GTA],
+
+I’m documenting a team communication issue in ENGE 1216. I’ve tried to reach out multiple times, but the problem is still unresolved. Could we set up a check-in or mediation to get the project back on track?
+
+Thank you,
+${name || '[Your Name]'}`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      const el = document.getElementById('copy-confirm');
+      el.textContent = '✓ Instructor note copied';
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 2500);
+    });
+  }
+
+  document.getElementById('mailto-instructor').addEventListener('click', () => {
+    const name = document.getElementById('student-name').value.trim();
+    const subject = encodeURIComponent('Team check-in summary');
+    const body = encodeURIComponent(
+`Hi Instructor/GTA,
+
+I’m documenting a team communication issue in ENGE 1216. I’ve tried to reach out multiple times, but the problem is still unresolved. Could we set up a check-in or mediation to get the project back on track?
+
+Thank you,
+${name || '[Your Name]'}`
+    );
+    const cc = encodeURIComponent('you@vt.edu');
+    window.location.href = `mailto:instructor@vt.edu?cc=${cc}&subject=${subject}&body=${body}`;
+  });
 </script>
 </body>
 </html>
